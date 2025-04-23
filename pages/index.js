@@ -2,11 +2,18 @@ import { useRouter } from 'next/router';
 import path from 'path';
 import fs from 'fs';
 import styles from '../styles/Home.module.css';
+import Link from 'next/link';
 
 export default function Home({ trendingMovies }) {
     const router =useRouter();
     return (
         <div className={styles.container}>
+            <nav className={styles.nav}>
+              <Link href="/help">Help</Link>
+              <Link href="/help/faqs">FAQs</Link>
+              <Link href="/help/contact">Contact</Link>
+              <Link href="/help/privacy">Privacy</Link>
+            </nav>
             <h1>Welcome to Movie House</h1>
             <h2>Trending Movies</h2>
             <div className={styles.movieList}>

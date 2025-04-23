@@ -1,25 +1,28 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import useSWR from 'swr';
+import { useRouter } from 'next/router';
 
+const fetcher = url => fetch(url).then(res => res.json());
 
-export default function DirectorDetail() {
-    const r=useRouter()
-    const{director,setdirector}=useState();
-    const {movies, setmovie}=useState();
+export default function MovieDirector() {
+  const router = useRouter();
+  const { id } = router.query; 
 
-    console.log(r.query.id)
+  const { data: directors, error: directorError } = useSWR('/api/directors', fetcher);
+  const { data: movies, error: movieError } = useSWR('/api/movies', fetcher);
 
- /* if (!director) {
-    return <div>Director not found</div>; // Handle case where director is not found
-  }*/
+  if (directorError || movieError) return <div>Failed to load data</div>;
+  if (!directors || !movies) return <div>Loading...</div>;
+  const movie = movies.find(m => m.id === id);
 
-  // Display director details
+  if (!movie) return <div>Movie not found</div>;
+  const director = directors.find(d => d.id === movie.directorId);
+
+  if (!director) return <div>Director not found</div>;
+
   return (
     <div>
-      <h1>Director</h1>
-      
+      <h2>Directed by {director.name}</h2>
+      <p>{director.biography}</p>
     </div>
   );
 }
-
-

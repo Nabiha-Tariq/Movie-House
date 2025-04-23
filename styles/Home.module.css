@@ -27,4 +27,6 @@
     border-radius: 8px;
     cursor: pointer;
   }
-  
+  .nav{
+    padding-left: 20px;
+  }

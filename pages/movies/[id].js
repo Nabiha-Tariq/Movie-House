@@ -2,9 +2,9 @@ import path from 'path';
 import fs from 'fs';
 import styles from '../../styles/Home.module.css';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export default function MovieDetail({ movie, director }) {
-  if (!movie) return <p>Movie not found.</p>;
 
   return (
     <div className={styles.container}>
@@ -14,7 +14,7 @@ export default function MovieDetail({ movie, director }) {
       <p><strong>Rating:</strong> {movie.rating}</p>
 
       {director && (
-        <div style={{ marginTop: '2rem' }}>
+        <div>
           <p>
            <strong>Director:</strong>
            <Link href={`/movies/${movie.id}/director`}> {director.name}</Link>
@@ -31,7 +31,7 @@ export async function getStaticPaths() {
   const { movies } = JSON.parse(jsonData);
 
   const paths = movies.map(movie => ({
-    params: { id: movie.id },
+    params: { id: movie.id}
   }));
 
   return {
@@ -49,6 +49,11 @@ export async function getStaticProps({ params }) {
   let director=null;
   if(movie){
     director = directors.find(d => d.id === movie.directorId);
+  }
+  if (!movie) {
+    return {
+      notFound: true,
+    };
   }
 
   return {
